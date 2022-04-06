@@ -14,6 +14,11 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
+    @GetMapping("/")
+    ResponseEntity<String> index() {
+        return new ResponseEntity<String>("Greetings!", HttpStatus.OK);
+    }
+
     @GetMapping("user/get/all")
     ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<List<User>>(userRepository.findAll(), HttpStatus.OK);
