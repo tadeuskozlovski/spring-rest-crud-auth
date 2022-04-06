@@ -15,10 +15,7 @@ public class User {
     private String name;
     private String role;
 
-    User() {
-    }
-
-    ;
+    User() {};
 
     User(String name, String role) {
         this.name = name;

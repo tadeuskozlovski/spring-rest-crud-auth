@@ -1,5 +1,7 @@
 package task.springrestcrudauth;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,22 +15,23 @@ public class UserController {
     }
 
     @GetMapping("user/get/all")
-    List<User> getAll() {
-        return userRepository.findAll();
+    ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<List<User>>(userRepository.findAll(), HttpStatus.OK);
     }
 
-    @PostMapping("user/new")
-    User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    @PutMapping("user/new")
+    ResponseEntity<User> createUser(@RequestBody User user) {
+        return new ResponseEntity<User>(userRepository.save(user), HttpStatus.CREATED);
     }
 
     @GetMapping("/user/get/{id}")
-    User getUserById(@PathVariable Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    ResponseEntity<User> getUserById(@PathVariable Long id) {
+        return new ResponseEntity<User>(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)),
+                HttpStatus.OK);
     }
 
-    @PostMapping("/user/update/{id}")
-    User update(@PathVariable Long id, @RequestBody User newUser) {
+    @PutMapping("/user/update/{id}")
+    ResponseEntity<User> update(@PathVariable Long id, @RequestBody User newUser) {
 
         User user = userRepository.findById(id)
                 /*.map(user -> {
@@ -42,16 +45,18 @@ public class UserController {
         user.setRole(newUser.getRole());
         userRepository.save(user);
 
-        return user;
+        return new ResponseEntity<User>(user, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/user/delete/{id}")
-    void deleteUser(@PathVariable Long id){
+    ResponseEntity deleteUser(@PathVariable Long id){
         // Check user existence before deletion
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
         // Deletion can be done another way
         // userRepository.deleteById(id);
         userRepository.delete(user);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
