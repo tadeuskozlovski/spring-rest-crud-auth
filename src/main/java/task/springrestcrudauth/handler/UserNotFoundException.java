@@ -1,7 +1,7 @@
-package task.springrestcrudauth;
+package task.springrestcrudauth.handler;
 
 public class UserNotFoundException extends RuntimeException {
-    UserNotFoundException(Long id){
+    public UserNotFoundException(Long id){
         super("User not found with id: " + id);
     }
 }
